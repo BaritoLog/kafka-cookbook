@@ -16,10 +16,7 @@ config = node[cookbook_name]['kafka']['config'].to_hash
 
 # Get zookeeper cluster list (from search), used in main config
 zookeeper_cluster = node.run_state.dig(cookbook_name, 'zookeeper')
-if zookeeper_cluster.nil?
-  node.run_state[cookbook_name]['abort?'] = true
-  return
-end
+return if zookeeper_cluster.nil?
 
 zk_connection = zookeeper_cluster['hosts'].
   map { |host| "#{host}:2181" }.

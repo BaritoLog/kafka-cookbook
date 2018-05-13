@@ -41,4 +41,10 @@ suites:
         kafka:
           role: kafka-cluster
           hosts: ['default-ubuntu-1604.vagrantup.com']
+          auto_restart: true
+          cli_opts:
+            -Xmx4g: nil
+            -Xms4g: nil
+            -Xmx384m: ''
+            -Xms64m: ''
         package_retries: 1

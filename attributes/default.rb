@@ -124,6 +124,58 @@ default[cookbook_name]['kafka']['log4j'] = {
   'log4j.additivity.state.change.logger' => 'false'
 }
 
+# Systemd unit file path
+default[cookbook_name]['unit_path'] = '/etc/systemd/system'
+# Restart kafka service if a configuration file change
+default[cookbook_name]['kafka']['auto_restart'] = 'true'
+
+# CLI options which will be defined in Systemd unit
+# Those options will be transformed:
+# - all key value pair are merged to create a single command line
+# - if value is 'nil' (string nil), the key is ignored (erase the option)
+# - if value is empty, the value is ignored but the key is outputted
+# - if key and value are defined, key=value is generated
+# The reason for string 'nil' is because using true nil will not override
+# a previously defined non-nil value.
+default[cookbook_name]['kafka']['cli_opts'] = {
+  '-Xms4g' => '',
+  '-Xmx4g' => '',
+  '-XX:+UseG1GC' => '',
+  '-XX:MaxGCPauseMillis' => 20,
+  '-XX:InitiatingHeapOccupancyPercent' => 35,
+  '-Dcom.sun.management.jmxremote' => '',
+  '-Dcom.sun.management.jmxremote.authenticate' => false,
+  '-Dcom.sun.management.jmxremote.ssl' => false,
+  '-Dcom.sun.management.jmxremote.port' => 8090,
+  '-Djava.rmi.server.hostname' => node['fqdn']
+}
+
+# Kafka Systemd service unit, can include all JVM options in ExecStart
+# by using cli_opts
+# You can override java path and kafka options by overriding ExecStart values
+default[cookbook_name]['kafka']['unit'] = {
+  'Unit' => {
+    'Description' => 'Kafka publish-subscribe messaging system',
+    'After' => 'network.target'
+  },
+  'Service' => {
+    'User' => node[cookbook_name]['kafka']['user'],
+    'Group' => node[cookbook_name]['kafka']['group'],
+    'SyslogIdentifier' => 'kafka',
+    'Restart' => 'on-failure',
+    'ExecStart' => {
+      'start' => '/usr/bin/java',
+      'end' =>
+        '-Dlog4j.configuration=file:/etc/kafka/log4j.properties '\
+        '-cp /usr/share/java/kafka/* '\
+        'kafka.Kafka /etc/kafka/server.properties'
+    }
+  },
+  'Install' => {
+    'WantedBy' => 'multi-user.target'
+  }
+}
+
 # Configure retries for the package resources, default = global default (0)
 # (mostly used for test purpose)
 default[cookbook_name]['package_retries'] = nil
