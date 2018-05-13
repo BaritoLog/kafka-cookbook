@@ -28,3 +28,16 @@ default[cookbook_name]['kafka']['size'] = 0
 default[cookbook_name]['kafka']['user'] = 'kafka'
 default[cookbook_name]['kafka']['group'] = 'kafka'
 
+# Java package to install by platform
+default[cookbook_name]['java'] = {
+  'centos' => 'java-1.8.0-openjdk-headless',
+  'ubuntu' => 'openjdk-8-jdk-headless'
+}
+
+# Confluent & kafka version
+default[cookbook_name]['confluent_version'] = '4.1.0'
+default[cookbook_name]['scala_version'] = '2.11'
+
+# Configure retries for the package resources, default = global default (0)
+# (mostly used for test purpose)
+default[cookbook_name]['package_retries'] = nil

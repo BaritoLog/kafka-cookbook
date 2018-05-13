@@ -11,6 +11,6 @@
 zookeeper_cluster = cluster_search(node[cookbook_name]['zookeeper'])
 return if zookeeper_cluster.nil? # Not enough nodes
 
-node.run_state[cookbook_name] = {}
-node.run_state[cookbook_name]['zookeeper'] = {}
+node.run_state[cookbook_name] ||= {}
+node.run_state[cookbook_name]['zookeeper'] ||= {}
 node.run_state[cookbook_name]['zookeeper']['hosts'] = zookeeper_cluster['hosts']
