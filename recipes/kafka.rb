@@ -6,4 +6,5 @@
 #
 #
 
+include_recipe "#{cookbook_name}::kafka_search"
 include_recipe "#{cookbook_name}::kafka_user"
