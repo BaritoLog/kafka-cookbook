@@ -16,28 +16,24 @@ platforms:
   - name: ubuntu-16.04
 
 suites:
-  # Install a stand-alone zookeeper
-  - name: zookeeper
-    run_list:
-      - recipe[zookeeper-cookbook]
-    attributes:
-      zookeeper-cookbook:
-        role: zookeeper-cluster
-        hosts: ['zookeeper-ubuntu-1604.vagrantup.com']
-        package_retries: 1
-        jvm_opts:
-          -Xmx128m:
   - name: default
     run_list:
+      - recipe[zookeeper-cookbook]
       - recipe[kafka-cookbook::kafka]
     verifier:
       inspec_tests:
         - test/integration/default
     attributes:
+      zookeeper-cookbook:
+        role: zookeeper-cluster
+        hosts: ['default-ubuntu-1604.vagrantup.com']
+        package_retries: 1
+        jvm_opts:
+          -Xmx128m:
       kafka-cookbook:
         zookeeper:
           role: zookeeper-cluster
-          hosts: ['zookeeper-ubuntu-1604.vagrantup.com']
+          hosts: ['default-ubuntu-1604.vagrantup.com']
         kafka:
           role: kafka-cluster
           hosts: ['default-ubuntu-1604.vagrantup.com']
