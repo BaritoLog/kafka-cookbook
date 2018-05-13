@@ -18,7 +18,7 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[kafka-cookbook::default]
+      - recipe[kafka-cookbook::kafka]
     verifier:
       inspec_tests:
         - test/integration/default

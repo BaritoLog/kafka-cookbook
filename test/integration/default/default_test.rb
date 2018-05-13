@@ -4,3 +4,14 @@
 
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
+
+unless os.windows?
+  describe group('kafka') do
+    it { should exist }
+  end
+
+  describe user('kafka')  do
+    it { should exist }
+  end
+end
+
