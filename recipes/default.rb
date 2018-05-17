@@ -1,5 +1,5 @@
 #
-# Cookbook:: kafka-cookbook
+# Cookbook:: kafka
 # Recipe:: default
 #
 # Copyright:: 2018, BaritoLog.

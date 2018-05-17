@@ -1,12 +1,12 @@
 #
-# Cookbook:: kafka-cookbook
+# Cookbook:: kafka
 # Attribute:: default
 #
 # Copyright:: 2018, BaritoLog.
 #
 #
 
-cookbook_name = 'kafka-cookbook'
+cookbook_name = 'kafka'
 
 # Zookeeper cluster configuration with cluster-search
 # Role used by the search to find other nodes of the cluster

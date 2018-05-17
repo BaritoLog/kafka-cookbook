@@ -1,4 +1,4 @@
-name 'kafka-cookbook'
+name 'kafka'
 maintainer 'BaritoLog'
 maintainer_email 'you@example.com'
 license 'MIT'

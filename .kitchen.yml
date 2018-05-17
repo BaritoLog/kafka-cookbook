@@ -18,19 +18,19 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[zookeeper-cookbook]
-      - recipe[kafka-cookbook::kafka]
+      - recipe[zookeeper]
+      - recipe[kafka::kafka]
     verifier:
       inspec_tests:
         - test/integration/default
     attributes:
-      zookeeper-cookbook:
+      zookeeper:
         role: zookeeper-cluster
         hosts: ['default-ubuntu-1604.vagrantup.com']
         package_retries: 1
         jvm_opts:
           -Xmx128m:
-      kafka-cookbook:
+      kafka:
         zookeeper:
           role: zookeeper-cluster
           hosts: ['default-ubuntu-1604.vagrantup.com']
