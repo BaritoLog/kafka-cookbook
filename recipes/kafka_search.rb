@@ -4,13 +4,10 @@
 #
 # Copyright:: 2018, BaritoLog.
 
-# Use ClusterSearch
-::Chef::Recipe.send(:include, ClusterSearch)
+# Don't continue if these variables are empty
+return if node[cookbook_name]['zookeeper']['hosts'].empty?
 
-# Search zookeeper cluster
-zookeeper_cluster = cluster_search(node[cookbook_name]['zookeeper'])
-return if zookeeper_cluster.nil? # Not enough nodes
-
+# Keep it simple for now
 node.run_state[cookbook_name] ||= {}
 node.run_state[cookbook_name]['zookeeper'] ||= {}
-node.run_state[cookbook_name]['zookeeper']['hosts'] = zookeeper_cluster['hosts']
+node.run_state[cookbook_name]['zookeeper']['hosts'] = node[cookbook_name]['zookeeper']['hosts']

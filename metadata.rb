@@ -18,5 +18,3 @@ issues_url 'https://github.com/BaritoLog/kafka-cookbook/issues'
 # a Supermarket.
 #
 source_url 'https://github.com/BaritoLog/kafka-cookbook'
-
-depends 'cluster-search'
