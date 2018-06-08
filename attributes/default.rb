@@ -34,6 +34,7 @@ default[cookbook_name]['kafka']['zk_chroot'] =
   "/#{node[cookbook_name]['kafka']['role']}"
 
 # Kafka configuration, default provided by Kafka project
+default[cookbook_name]['kafka']['max_replication_factor'] = 3
 default[cookbook_name]['kafka']['config'] = {
   'broker.id' => -1,
   'port' => 9092,

@@ -18,11 +18,20 @@ config = node[cookbook_name]['kafka']['config'].to_hash
 zookeeper_cluster = node.run_state.dig(cookbook_name, 'zookeeper')
 return if zookeeper_cluster.nil?
 
+# Get zookeeper hosts
 zk_connection = zookeeper_cluster['hosts'].
   map { |host| "#{host}:2181" }.
   join(',') 
 zk_connection += node[cookbook_name]['kafka']['zk_chroot']
 config['zookeeper.connect'] = zk_connection
+
+# Configure replication factor
+kafka_hosts_count = node[cookbook_name]['kafka']['hosts'].count
+if kafka_hosts_count < 3
+  config['offsets.topic.replication.factor'] = kafka_hosts_count
+else
+  config['offsets.topic.replication.factor'] = node[cookbook_name]['kafka']['max_replication_factor']
+end
 
 # Write configurations
 files = {
