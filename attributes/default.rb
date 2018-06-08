@@ -8,6 +8,10 @@
 
 cookbook_name = 'kafka'
 
+# Attributes for registering these services to consul
+default[cookbook_name]['consul']['config_dir'] = '/opt/consul/etc'
+default[cookbook_name]['consul']['bin'] = '/opt/bin/consul'
+
 # Hosts of the cluster
 default[cookbook_name]['zookeeper']['hosts'] = []
 
@@ -34,10 +38,11 @@ default[cookbook_name]['kafka']['zk_chroot'] =
   "/#{node[cookbook_name]['kafka']['role']}"
 
 # Kafka configuration, default provided by Kafka project
+default[cookbook_name]['kafka']['port'] = 9092
 default[cookbook_name]['kafka']['max_replication_factor'] = 3
 default[cookbook_name]['kafka']['config'] = {
   'broker.id' => -1,
-  'port' => 9092,
+  'port' => node[cookbook_name]['kafka']['port'],
   'num.network.threads' => 3,
   'num.io.threads' => 8,
   'socket.send.buffer.bytes' => 102_400,
