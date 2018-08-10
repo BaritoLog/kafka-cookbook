@@ -41,6 +41,7 @@ default[cookbook_name]['kafka']['zk_chroot'] =
 default[cookbook_name]['kafka']['port'] = 9092
 default[cookbook_name]['kafka']['max_replication_factor'] = 3
 default[cookbook_name]['kafka']['config'] = {
+  'advertised.listeners' => "PLAINTEXT://#{node['ipaddress']}:#{node[cookbook_name]['kafka']['port']}",
   'broker.id' => -1,
   'port' => node[cookbook_name]['kafka']['port'],
   'num.network.threads' => 3,
