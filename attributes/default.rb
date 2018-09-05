@@ -25,7 +25,7 @@ default[cookbook_name]['kafka']['group'] = 'kafka'
 # Java package to install by platform
 default[cookbook_name]['java'] = {
   'centos' => 'java-1.8.0-openjdk-headless',
-  'ubuntu' => 'openjdk-8-jdk-headless'
+  'ubuntu' => 'openjdk-11-jdk-headless'
 }
 
 # Confluent & kafka version
