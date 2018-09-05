@@ -31,17 +31,17 @@ suites:
     attributes:
       zookeeper:
         role: zookeeper-cluster
-        hosts: ['default-ubuntu-1604.vagrantup.com']
+        hosts: ['default-opscode-ubuntu-1804-chef-14']
         package_retries: 1
         jvm_opts:
           -Xmx128m:
       kafka:
         zookeeper:
           role: zookeeper-cluster
-          hosts: ['default-ubuntu-1604.vagrantup.com']
+          hosts: ['default-opscode-ubuntu-1804-chef-14']
         kafka:
           role: kafka-cluster
-          hosts: ['default-ubuntu-1604.vagrantup.com']
+          hosts: ['default-opscode-ubuntu-1804-chef-14']
           auto_restart: true
           cli_opts:
             -Xmx4g: nil

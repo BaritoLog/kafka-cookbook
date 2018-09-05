@@ -15,7 +15,7 @@ unless os.windows?
   end
 end
 
-describe package('openjdk-8-jdk-headless') do
+describe package('openjdk-11-jdk-headless') do
   it { should be_installed }
 end
 
