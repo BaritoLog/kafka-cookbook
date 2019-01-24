@@ -12,6 +12,13 @@ cookbook_name = 'kafka'
 default[cookbook_name]['consul']['config_dir'] = '/opt/consul/etc'
 default[cookbook_name]['consul']['bin'] = '/opt/bin/consul'
 
+# Temp directory
+default[cookbook_name]['prefix_temp'] = '/var/cache/chef'
+# Installation directory
+default[cookbook_name]['prefix_root'] = '/opt'
+# Where to link binaries
+default[cookbook_name]['prefix_bin'] = '/opt/bin'
+
 # Hosts of the cluster
 default[cookbook_name]['zookeeper']['hosts'] = []
 
@@ -180,3 +187,49 @@ default[cookbook_name]['kafka']['unit'] = {
 # Configure retries for the package resources, default = global default (0)
 # (mostly used for test purpose)
 default[cookbook_name]['package_retries'] = nil
+
+#
+# Burrow
+#
+default[cookbook_name]['burrow']['service_name'] = 'burrow'
+
+# User and group of burrow process
+default[cookbook_name]['burrow']['user'] = 'burrow'
+default[cookbook_name]['burrow']['group'] = 'burrow'
+
+default[cookbook_name]['burrow']['version'] = 'v1.1.0'
+default[cookbook_name]['burrow']['kafka_cluster'] = {}
+default[cookbook_name]['burrow']['zookeeper_clusters']= []
+default[cookbook_name]['burrow']['topic_refresh_interval']= 60
+default[cookbook_name]['burrow']['offset_refresh_interval']= 30
+  
+burrow_version = node[cookbook_name]['burrow']['version']
+
+# where to get the binary
+default[cookbook_name]['burrow']['tar'] = 'Burrow_1.1.0_linux_amd64.tar.gz'
+burrow_tar = node[cookbook_name]['burrow']['tar']
+
+default[cookbook_name]['burrow']['mirror'] =
+  "https://github.com/linkedin/Burrow/releases/download/#{burrow_version}/#{burrow_tar}"
+
+# log file location
+default[cookbook_name]['burrow']['prefix_log'] = '/var/log/burrow'
+default[cookbook_name]['burrow']['log_file_name'] = 'error.log'
+
+# Burrow Systemd service unit,
+default[cookbook_name]['burrow']['systemd_unit'] = {
+  'Unit' => {
+    'Description' => 'Burrow',
+    'After' => 'network.target'
+  },
+  'Service' => {
+    'User' => node[cookbook_name]['burrow']['user'],
+    'Group' => node[cookbook_name]['burrow']['group'],
+    'SyslogIdentifier' => 'burrow',
+    'Restart' => 'on-failure',
+    'ExecStart' => '/opt/bin/burrow -config-dir /opt/bin/config'
+  },
+  'Install' => {
+    'WantedBy' => 'multi-user.target'
+  }
+}

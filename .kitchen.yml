@@ -23,7 +23,7 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[zookeeper]
+      # - recipe[zookeeper]
       - recipe[kafka::kafka]
     verifier:
       inspec_tests:
@@ -48,4 +48,13 @@ suites:
             -Xms4g: nil
             -Xmx384m: ''
             -Xms64m: ''
+        burrow:
+          zookeeper_clusters: ['localhost']
+          kafka_cluster: 
+            broker_ips: ['localhost']
+            name: 'guja'
+            zookeeper_ips: ['localhost']
+          topic_refresh_interval: 60
+          offset_refresh_interval: 30
+
         package_retries: 1

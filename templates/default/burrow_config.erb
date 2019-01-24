@@ -1,0 +1,23 @@
+[zookeeper]
+servers = <%= @zookeeper_clusters.collect{ |ip| ip += ":2181"} %>
+timeout = 6
+root-path = "/burrow/notifier"
+
+[cluster.<%=@kafka_cluster['name']%>]
+class-name = "kafka"
+servers = <%= @kafka_cluster['broker_ips'].collect{ |ip| ip += ":9092" } %>
+topic-refresh = <%= @topic_refresh_interval %>
+offset-refresh = <%= @offset_refresh_interval%>
+
+[consumer.<%=@kafka_cluster['name']%>]
+class-name = "kafka"
+cluster = "<%=@kafka_cluster['name']%>"
+servers = <%= @kafka_cluster['broker_ips'].collect{ |ip| ip += ":9092" } %>
+group-blacklist = "(console-consumer-|python-kafka-consumer-|manual)"
+
+[consumer.<%=@kafka_cluster['name']%>_zk]
+class-name="kafka_zk"
+cluster="<%=@kafka_cluster['name']%>"
+servers= <%= @kafka_cluster['zookeeper_ips'].collect{ |ip| ip += ":2181" } %>
+zookeeper-timeout=30
+
