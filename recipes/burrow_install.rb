@@ -27,10 +27,22 @@ kafka_burrow_setup service_name do
   offset_refresh_interval node[cookbook_name]['burrow']['offset_refresh_interval']
 end
 
-bin = "#{node[cookbook_name]['prefix_bin']}/#{service_name}"
-kafka_burrow_systemd service_name do
-  systemd_unit node[cookbook_name]['burrow']['systemd_unit']
-  bin bin
-  prefix_log node[cookbook_name]['burrow']['prefix_log']
-  log_file_name node[cookbook_name]['burrow']['log_file_name']
+template '/etc/systemd/system/burrow.service' do
+  source 'burrow_service.erb'
+  mode '0644'
+  variables(
+    init_command: node[cookbook_name]['burrow']['init_command']
+  )
+  notifies :run, 'execute[systemctl daemon-reload]', :immediately
+  notifies :restart, "service[#{service_name}]", :delayed
+end
+
+execute 'systemctl daemon-reload' do
+  action :nothing
+end
+
+service service_name do
+  provider Object.const_get 'Chef::Provider::Service::Systemd'
+  supports status: true, start: true, stop: true, restart: true
+  action [:start, :enable]
 end

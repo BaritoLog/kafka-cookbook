@@ -23,8 +23,13 @@ platforms:
 suites:
   - name: default
     run_list:
-      # - recipe[zookeeper]
+      - recipe[zookeeper]
       - recipe[kafka::kafka]
+    driver_config:
+      customize:
+        memory: 2048
+      network:
+        - ['private_network', {ip: '192.168.33.50'}]
     verifier:
       inspec_tests:
         - test/integration/default
@@ -32,6 +37,7 @@ suites:
       zookeeper:
         role: zookeeper-cluster
         hosts: ['default-opscode-ubuntu-1804-chef-14']
+        my_id: 1
         package_retries: 1
         jvm_opts:
           -Xmx128m:

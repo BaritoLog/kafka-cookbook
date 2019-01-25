@@ -21,6 +21,7 @@ default[cookbook_name]['prefix_bin'] = '/opt/bin'
 
 # Hosts of the cluster
 default[cookbook_name]['zookeeper']['hosts'] = []
+default[cookbook_name]['zookeeper']['my_id'] = 1
 
 # Hosts of the cluster
 default[cookbook_name]['kafka']['hosts'] = []
@@ -216,20 +217,6 @@ default[cookbook_name]['burrow']['mirror'] =
 default[cookbook_name]['burrow']['prefix_log'] = '/var/log/burrow'
 default[cookbook_name]['burrow']['log_file_name'] = 'error.log'
 
-# Burrow Systemd service unit,
-default[cookbook_name]['burrow']['systemd_unit'] = {
-  'Unit' => {
-    'Description' => 'Burrow',
-    'After' => 'network.target'
-  },
-  'Service' => {
-    'User' => node[cookbook_name]['burrow']['user'],
-    'Group' => node[cookbook_name]['burrow']['group'],
-    'SyslogIdentifier' => 'burrow',
-    'Restart' => 'on-failure',
-    'ExecStart' => '/opt/bin/burrow -config-dir /opt/bin/config'
-  },
-  'Install' => {
-    'WantedBy' => 'multi-user.target'
-  }
-}
+# Burrow Systemd service unit
+default[cookbook_name]['burrow']['init_command'] = '/opt/bin/burrow/burrow -config-dir /opt/bin/burrow/config'
+
