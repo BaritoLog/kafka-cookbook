@@ -25,24 +25,10 @@ kafka_burrow_setup service_name do
   zookeeper_clusters node[cookbook_name]['burrow']['zookeeper_clusters']
   topic_refresh_interval node[cookbook_name]['burrow']['topic_refresh_interval']
   offset_refresh_interval node[cookbook_name]['burrow']['offset_refresh_interval']
+  burrow_port node[cookbook_name]['burrow']['port']
 end
 
-template '/etc/systemd/system/burrow.service' do
-  source 'burrow_service.erb'
-  mode '0644'
-  variables(
-    init_command: node[cookbook_name]['burrow']['init_command']
-  )
-  notifies :run, 'execute[systemctl daemon-reload]', :immediately
-  notifies :restart, "service[#{service_name}]", :delayed
-end
-
-execute 'systemctl daemon-reload' do
-  action :nothing
-end
-
-service service_name do
-  provider Object.const_get 'Chef::Provider::Service::Systemd'
-  supports status: true, start: true, stop: true, restart: true
-  action [:start, :enable]
+kafka_burrow_systemd service_name do
+  service_name service_name
+  init_command node[cookbook_name]['burrow']['init_command']
 end

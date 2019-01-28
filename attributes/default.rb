@@ -203,6 +203,7 @@ default[cookbook_name]['burrow']['kafka_cluster'] = {}
 default[cookbook_name]['burrow']['zookeeper_clusters']= []
 default[cookbook_name]['burrow']['topic_refresh_interval']= 60
 default[cookbook_name]['burrow']['offset_refresh_interval']= 30
+default[cookbook_name]['burrow']['port']= 8000
   
 burrow_version = node[cookbook_name]['burrow']['version']
 

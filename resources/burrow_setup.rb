@@ -11,6 +11,7 @@ property :kafka_cluster, Hash, required: true
 property :zookeeper_clusters, Array, required: true
 property :topic_refresh_interval, Integer, required: true
 property :offset_refresh_interval, Integer, required: true
+property :burrow_port, Integer, required: true
 
 action :create do
   # Create prefix directories
@@ -47,6 +48,14 @@ action :create do
     mode 0755
   end
 
+  # Create var/log/burrow directory
+  directory "/var/log/#{new_resource.service_name}" do
+    mode 0755
+    owner new_resource.user
+    group new_resource.group
+    action :create
+  end
+
   # Unzip the tar file
   execute 'extract_burrow_binary' do
     command "tar xzvf #{tar_file} --directory #{new_resource.prefix_bin}/#{new_resource.service_name}"
@@ -65,9 +74,10 @@ action :create do
       kafka_cluster: new_resource.kafka_cluster,
       zookeeper_clusters: new_resource.zookeeper_clusters,
       topic_refresh_interval: new_resource.topic_refresh_interval,
-      offset_refresh_interval: new_resource.offset_refresh_interval
+      offset_refresh_interval: new_resource.offset_refresh_interval,
+      burrow_port: new_resource.burrow_port
       )
-    mode '0644'
+    mode 0644
   end
 
 end
