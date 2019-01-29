@@ -1,7 +1,7 @@
 [zookeeper]
 servers=<%= @zookeeper_clusters.collect{ |ip| ip += ":2181"} %>
 timeout=6
-root-path="/opt/bin/burrow"
+root-path="<%= @root_path %>"
 
 [cluster.<%=@kafka_cluster['name']%>]
 class-name="kafka"

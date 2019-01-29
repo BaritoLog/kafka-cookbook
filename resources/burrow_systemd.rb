@@ -1,4 +1,4 @@
-property :service_name, String, required: true
+property :service_name, String, name_property: true
 property :init_command, String, required: true
 
 action :create do
