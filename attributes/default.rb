@@ -21,7 +21,6 @@ default[cookbook_name]['prefix_bin'] = '/opt/bin'
 
 # Hosts of the cluster
 default[cookbook_name]['zookeeper']['hosts'] = []
-default[cookbook_name]['zookeeper']['my_id'] = 1
 
 # Hosts of the cluster
 default[cookbook_name]['kafka']['hosts'] = []
