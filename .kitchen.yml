@@ -25,6 +25,7 @@ suites:
     run_list:
       - recipe[zookeeper]
       - recipe[kafka::kafka]
+      - recipe[kafka::burrow_install]
     driver_config:
       customize:
         memory: 2048
@@ -58,7 +59,7 @@ suites:
           zookeeper_clusters: ['localhost']
           kafka_cluster: 
             broker_ips: ['localhost']
-            name: 'guja'
+            name: 'test'
             zookeeper_ips: ['localhost']
           topic_refresh_interval: 60
           offset_refresh_interval: 30
