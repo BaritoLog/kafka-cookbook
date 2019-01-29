@@ -1,0 +1,11 @@
+[Unit]
+Description=Burrow
+After=network.target
+
+[Service]
+SyslogIdentifier=burrow
+Restart=on-failure
+ExecStart=<%=@init_command%>
+
+[Install]
+WantedBy=multi-user.target

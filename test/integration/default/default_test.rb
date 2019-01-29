@@ -48,3 +48,27 @@ describe systemd_service('kafka') do
   it { should be_enabled }
   it { should be_running }
 end
+
+describe directory('/opt/burrow') do
+  its('mode') { should cmp '0755' }
+  its('owner') { should eq 'burrow' }
+  its('group') { should eq 'burrow' }
+end
+
+describe directory('/opt/burrow/config') do
+  its('mode') { should cmp '0755' }
+  its('owner') { should eq 'burrow' }
+  its('group') { should eq 'burrow' }
+end
+
+describe file('/opt/burrow/config/burrow.toml') do
+  its('mode') { should cmp '0644' }
+  its('owner') { should eq 'burrow' }
+  its('group') { should eq 'burrow' }
+end
+
+describe systemd_service('burrow') do
+  it { should be_installed }
+  it { should be_enabled }
+  it { should be_running }
+end

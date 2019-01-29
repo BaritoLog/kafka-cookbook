@@ -180,3 +180,41 @@ default[cookbook_name]['kafka']['unit'] = {
 # Configure retries for the package resources, default = global default (0)
 # (mostly used for test purpose)
 default[cookbook_name]['package_retries'] = nil
+
+#
+# Burrow
+#
+default[cookbook_name]['burrow']['service_name'] = 'burrow'
+
+# Temp directory
+default[cookbook_name]['burrow']['prefix_temp'] = '/var/cache/chef'
+# Installation directory
+default[cookbook_name]['burrow']['prefix_root'] = '/opt'
+# Where to link binaries
+default[cookbook_name]['burrow']['prefix_bin'] = '/opt/bin'
+# Log file location
+default[cookbook_name]['burrow']['prefix_log'] = '/var/log/burrow'
+
+# User and group of burrow process
+default[cookbook_name]['burrow']['user'] = 'burrow'
+default[cookbook_name]['burrow']['group'] = 'burrow'
+
+default[cookbook_name]['burrow']['version'] = 'v1.1.0'
+burrow_version = node[cookbook_name]['burrow']['version']
+
+# Where to get the binary
+default[cookbook_name]['burrow']['tar'] = 'Burrow_1.1.0_linux_amd64.tar.gz'
+burrow_tar = node[cookbook_name]['burrow']['tar']
+
+default[cookbook_name]['burrow']['mirror'] =
+  "https://github.com/linkedin/Burrow/releases/download/#{burrow_version}/#{burrow_tar}"
+
+# Burrow configurations
+default[cookbook_name]['burrow']['zookeeper_clusters']= []
+default[cookbook_name]['burrow']['kafka_cluster'] = {}
+default[cookbook_name]['burrow']['topic_refresh_interval']= 60
+default[cookbook_name]['burrow']['offset_refresh_interval']= 30
+default[cookbook_name]['burrow']['port']= 8000
+
+# Burrow Systemd service unit
+default[cookbook_name]['burrow']['init_command'] = '/opt/bin/burrow -config-dir /opt/burrow/config'
