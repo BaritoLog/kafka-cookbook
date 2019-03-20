@@ -1,0 +1,17 @@
+AllCops:
+  Exclude:
+    - '.kitchen/**/*'
+    - 'vendor/**/*'
+
+Layout/EndOfLine:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 20
+Metrics/LineLength:
+  Max: 200
+Metrics/BlockLength:
+  Max: 42
+  Exclude:
+  - spec/**/*
+Style/MultilineIfModifier:
+  Enabled: false
