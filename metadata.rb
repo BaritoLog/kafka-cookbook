@@ -4,7 +4,7 @@ maintainer_email 'you@example.com'
 license 'MIT'
 description 'Installs/Configures kafka cluster'
 long_description 'Installs/Configures kafka cluster'
-version '0.1.0'
+version '2.11'
 chef_version '>= 12.14' if respond_to?(:chef_version)
 
 # The `issues_url` points to the location where issues for this cookbook are
