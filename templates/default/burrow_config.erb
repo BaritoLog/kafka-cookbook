@@ -1,5 +1,5 @@
 [zookeeper]
-servers=<%= @zookeeper_clusters.collect{ |ip| ip += ":2181"} %>
+servers=<%= @zookeeper_clusters %>
 timeout=6
 root-path="<%= @root_path %>"
 
@@ -19,7 +19,7 @@ group-whitelist=""
 [consumer.<%=@kafka_cluster['name']%>_zk]
 class-name="kafka_zk"
 cluster="<%=@kafka_cluster['name']%>"
-servers= <%= @kafka_cluster['zookeeper_ips'].collect{ |ip| ip += ":2181" } %>
+servers=<%= @kafka_zookeeper_ips %>
 zookeeper-path="/local"
 zookeeper-timeout=30
 group-blacklist="^(console-consumer-|python-kafka-consumer-).*$"

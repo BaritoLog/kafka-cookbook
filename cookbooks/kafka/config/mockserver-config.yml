@@ -1,0 +1,15 @@
+configs:
+  - path: /v2/configurations/zookeeper_service/latest
+    content: >
+      {
+        "success": true,
+        "data": {
+          "zookeeper_hosts": "[{\"hostname\":\"zookeeper-01-ubuntu-1804.vagrantup.com\",\"ip\":\"0.0.0.0\"},{\"hostname\":\"zookeeper-02-ubuntu-1804.vagrantup.com\",\"ip\":\"0.0.0.0\"}]"
+        }
+      }
+    contentType: application/json
+    statusCode: 200
+  - path: /ping
+    content: pong
+    contentType: application/json
+    statusCode: 200

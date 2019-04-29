@@ -9,6 +9,7 @@ property :version, String, required: true
 property :mirror, String, required: true
 property :zookeeper_clusters, Array, required: true
 property :kafka_cluster, Hash, required: true
+property :yggdrasil_config, Hash, required: true
 property :topic_refresh_interval, Integer, required: true
 property :offset_refresh_interval, Integer, required: true
 property :burrow_port, Integer, required: true
@@ -16,6 +17,26 @@ property :burrow_port, Integer, required: true
 action :create do
   root_path = "#{new_resource.prefix_root}/#{new_resource.name}"
   config_path = "#{root_path}/config"
+  zookeeper_clusters = new_resource.zookeeper_clusters
+  kafka_zookeeper_ips = new_resource.kafka_cluster['zookeeper_ips']
+
+  # Change mapping function when yggdrasil is enabled
+  if new_resource.yggdrasil_config['enabled']
+    zookeeper_clusters = zookeeper_clusters.map { |host| host['hostname'] + ":2181" }
+    kafka_zookeeper_ips = zookeeper_clusters
+
+    # Add hostname to /etc/hosts if requested
+    if new_resource.yggdrasil_config['configure_etc_hosts']
+      new_resource.zookeeper_clusters.each do |v|
+        hostsfile_entry v['ip'] do
+          hostname  v['hostname']
+          action    :create
+        end
+      end
+    end
+  else
+    zookeeper_clusters = zookeeper_clusters.map { |host| host + ":2181" }
+  end
 
   [
     new_resource.prefix_root,
@@ -67,8 +88,9 @@ action :create do
     source 'burrow_config.erb'
     variables(
       root_path: root_path,
-      zookeeper_clusters: new_resource.zookeeper_clusters,
+      zookeeper_clusters: zookeeper_clusters,
       kafka_cluster: new_resource.kafka_cluster,
+      kafka_zookeeper_ips: kafka_zookeeper_ips,
       topic_refresh_interval: new_resource.topic_refresh_interval,
       offset_refresh_interval: new_resource.offset_refresh_interval,
       burrow_port: new_resource.burrow_port

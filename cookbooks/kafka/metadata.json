@@ -9,6 +9,7 @@
 
   },
   "dependencies": {
+    "hostsfile": ">= 0.0.0",
     "zookeeper": ">= 0.0.0"
   },
   "providing": {
@@ -20,7 +21,7 @@
   "recipes": {
 
   },
-  "version": "0.1.0",
+  "version": "2.11.0",
   "source_url": "https://github.com/BaritoLog/kafka-cookbook",
   "issues_url": "https://github.com/BaritoLog/kafka-cookbook/issues",
   "privacy": false,

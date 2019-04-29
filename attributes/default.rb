@@ -18,6 +18,11 @@ default[cookbook_name]['zookeeper']['hosts'] = []
 # Hosts of the cluster
 default[cookbook_name]['kafka']['hosts'] = []
 
+# Yggdrasil configuration
+default[cookbook_name]['yggdrasil']['enabled'] = false
+default[cookbook_name]['yggdrasil']['config_dir'] = '/opt/yggdrasil'
+default[cookbook_name]['yggdrasil']['configure_etc_hosts'] = false
+
 # User and group of kafka process
 default[cookbook_name]['kafka']['user'] = 'kafka'
 default[cookbook_name]['kafka']['group'] = 'kafka'

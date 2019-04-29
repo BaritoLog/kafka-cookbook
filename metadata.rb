@@ -19,4 +19,5 @@ issues_url 'https://github.com/BaritoLog/kafka-cookbook/issues'
 #
 source_url 'https://github.com/BaritoLog/kafka-cookbook'
 
+depends 'hostsfile'
 depends 'zookeeper'

@@ -5,6 +5,8 @@
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
 
+require 'rspec/retry'
+
 unless os.windows?
   describe group('kafka') do
     it { should exist }
@@ -49,6 +51,17 @@ describe systemd_service('kafka') do
   it { should be_running }
 end
 
+# Check if kafka is connected with zookeeper
+describe 'Connection kafka - zookeeper' do
+  it 'should be connected' do
+    expect(command('zookeeper-shell localhost:2181 <<< "ls /kafka-cluster/brokers/ids"').stdout).to match /1001|\[\]/
+  end
+end
+
+describe file('/etc/hosts') do
+  its('content') { should match /0.0.0.0\s+default-opscode-ubuntu-1804-chef-14/ }
+end
+
 describe directory('/opt/burrow') do
   its('mode') { should cmp '0755' }
   its('owner') { should eq 'burrow' }
@@ -65,10 +78,17 @@ describe file('/opt/burrow/config/burrow.toml') do
   its('mode') { should cmp '0644' }
   its('owner') { should eq 'burrow' }
   its('group') { should eq 'burrow' }
+
+  # Should check if yggdrasil configs are persisted
+  its('content') { should match /servers=\["default-opscode-ubuntu-1804-chef-14:2181"\]/ }
 end
 
 describe systemd_service('burrow') do
   it { should be_installed }
   it { should be_enabled }
-  it { should be_running }
+
+  # Test is replaced because the test before only checks before the block starts
+  it 'should be running', retry: 3, retry_wait: 10 do
+    expect(command("systemctl is-active burrow --quiet").exit_status).to eq 0
+  end
 end
