@@ -27,3 +27,15 @@ group-whitelist=""
 
 [httpserver.default]
 address=":<%=@burrow_port%>"
+
+[notifier.slack]
+class-name="http"
+interval=<%=@notifier_interval%>
+threshold=<%=@notifier_threshold%>
+timeout=<%=@notifier_timeout%>
+keepalive=<%=@notifier_keepalive%>
+send-close=<%=@notifier_send_close%>
+url-open="<%=@notifier_url_open%>"
+template-open="<%=@root_path%>/slack_open.tmpl"
+url-close="<%=@notifier_url_close%>"
+template-close="<%=@root_path%>/slack_close.tmpl"

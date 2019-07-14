@@ -83,9 +83,26 @@ describe file('/opt/burrow/config/burrow.toml') do
   its('content') { should match /servers=\["default-opscode-ubuntu-1804-chef-14:2181"\]/ }
 end
 
+describe file('/opt/burrow/slack_open.tmpl') do
+  its('mode') { should cmp '0644' }
+  its('owner') { should eq 'burrow' }
+  its('group') { should eq 'burrow' }
+
+  its('content') { should match /"color": "#cd2553"/ }
+end
+
+describe file('/opt/burrow/slack_close.tmpl') do
+  its('mode') { should cmp '0644' }
+  its('owner') { should eq 'burrow' }
+  its('group') { should eq 'burrow' }
+
+  its('content') { should match /"color": "#36a64f"/ }
+end
+
 describe systemd_service('burrow') do
   it { should be_installed }
   it { should be_enabled }
+  it { should be_running }
 
   # Test is replaced because the test before only checks before the block starts
   it 'should be running', retry: 3, retry_wait: 10 do

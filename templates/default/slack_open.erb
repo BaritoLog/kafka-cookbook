@@ -1,0 +1,41 @@
+{
+    "attachments": [
+        {
+            "color": "#cd2553",
+            "title": "Triggered: [Burrow] Kafka Consumer Lag Alert on {{.Result.Cluster}}",
+            "text": "Burrow found a problem with one of your consumer groups",
+            "fields": [
+                {
+                    "title": "Cluster",
+                    "value": "{{.Result.Cluster}}",
+                    "short": true
+                },
+                {
+                    "title": "Group",
+                    "value": "{{.Result.Group}}",
+                    "short": true
+                },
+                {
+                    "title": "Status",
+                    "value": "{{.Result.Status}}",
+                    "short": true
+                },
+                {
+                    "title": "Complete",
+                    "value": "{{.Result.Complete}}",
+                    "short": true
+                },
+                {
+                    "title": "Errors",
+                    "value": "{{len .Result.Partitions}} partitions have problems",
+                    "short": true
+                },
+                {
+                    "title": "Total Lags",
+                    "value": "{{len .Result.TotalLag}}",
+                    "short": true
+                }
+            ]
+        }
+    ]
+}

@@ -13,6 +13,13 @@ property :yggdrasil_config, Hash, required: true
 property :topic_refresh_interval, Integer, required: true
 property :offset_refresh_interval, Integer, required: true
 property :burrow_port, Integer, required: true
+property :notifier_interval, Integer
+property :notifier_threshold, Integer
+property :notifier_timeout, Integer
+property :notifier_keepalive, Integer
+property :notifier_send_close, [true, false], default: false
+property :notifier_url_open, String
+property :notifier_url_close, String
 
 action :create do
   root_path = "#{new_resource.prefix_root}/#{new_resource.name}"
@@ -84,6 +91,20 @@ action :create do
     cwd new_resource.prefix_bin
   end
 
+  template "#{root_path}/slack_open.tmpl" do
+    source 'slack_open.erb'
+    owner new_resource.user
+    group new_resource.group
+    mode 0644
+  end
+
+  template "#{root_path}/slack_close.tmpl" do
+    source 'slack_close.erb'
+    owner new_resource.user
+    group new_resource.group
+    mode 0644
+  end
+
   template "#{config_path}/burrow.toml" do
     source 'burrow_config.erb'
     variables(
@@ -93,7 +114,14 @@ action :create do
       kafka_zookeeper_ips: kafka_zookeeper_ips,
       topic_refresh_interval: new_resource.topic_refresh_interval,
       offset_refresh_interval: new_resource.offset_refresh_interval,
-      burrow_port: new_resource.burrow_port
+      burrow_port: new_resource.burrow_port,
+      notifier_interval: new_resource.notifier_interval,
+      notifier_threshold: new_resource.notifier_threshold,
+      notifier_timeout: new_resource.notifier_timeout,
+      notifier_keepalive: new_resource.notifier_keepalive,
+      notifier_send_close: new_resource.notifier_send_close,
+      notifier_url_open: new_resource.notifier_url_open,
+      notifier_url_close: new_resource.notifier_url_close
     )
     owner new_resource.user
     group new_resource.group

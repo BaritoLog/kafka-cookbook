@@ -220,6 +220,14 @@ default[cookbook_name]['burrow']['kafka_cluster'] = {}
 default[cookbook_name]['burrow']['topic_refresh_interval']= 60
 default[cookbook_name]['burrow']['offset_refresh_interval']= 30
 default[cookbook_name]['burrow']['port']= 8000
+# Burrow notifier http configurations
+default[cookbook_name]['burrow']['notifier']['interval']= 300
+default[cookbook_name]['burrow']['notifier']['threshold']= 2
+default[cookbook_name]['burrow']['notifier']['timeout']= 60
+default[cookbook_name]['burrow']['notifier']['keepalive']= 60
+default[cookbook_name]['burrow']['notifier']['send_close']= false
+default[cookbook_name]['burrow']['notifier']['url_open']= "http:localhost:8000/kafkastatus"
+default[cookbook_name]['burrow']['notifier']['url_close']= "http:localhost:8000/kafkastatus"
 
 # Burrow Systemd service unit
 default[cookbook_name]['burrow']['init_command'] = '/opt/bin/burrow -config-dir /opt/burrow/config'

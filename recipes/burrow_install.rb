@@ -29,6 +29,13 @@ kafka_burrow_setup service_name do
   topic_refresh_interval node[cookbook_name]['burrow']['topic_refresh_interval']
   offset_refresh_interval node[cookbook_name]['burrow']['offset_refresh_interval']
   burrow_port node[cookbook_name]['burrow']['port']
+  notifier_interval  node[cookbook_name]['burrow']['notifier']['interval']
+  notifier_threshold  node[cookbook_name]['burrow']['notifier']['threshold']
+  notifier_timeout  node[cookbook_name]['burrow']['notifier']['timeout']
+  notifier_keepalive  node[cookbook_name]['burrow']['notifier']['keepalive']
+  notifier_send_close  node[cookbook_name]['burrow']['notifier']['send_close']
+  notifier_url_open  node[cookbook_name]['burrow']['notifier']['url_open']
+  notifier_url_close  node[cookbook_name]['burrow']['notifier']['url_close']
 end
 
 kafka_burrow_systemd service_name do

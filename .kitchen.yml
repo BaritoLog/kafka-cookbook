@@ -11,6 +11,8 @@ provisioner:
   # For example:
   #   always_update_cookbooks: <%= !ENV['CI'] %>
   always_update_cookbooks: true
+  client_rb:
+    chef_license: accept
 
 verifier:
   name: inspec
@@ -70,5 +72,13 @@ suites:
             zookeeper_ips: ['localhost']
           topic_refresh_interval: 60
           offset_refresh_interval: 30
+          notifier:
+            interval: 300
+            threshold: 2
+            timeout: 60
+            keepalive: 60
+            send_close: true
+            url_open: "http://localhost:8000/kafkastatus"
+            url_close: "http://localhost:8000/kafkastatus"
 
         package_retries: 1
