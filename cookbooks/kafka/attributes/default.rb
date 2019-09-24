@@ -11,6 +11,10 @@ cookbook_name = 'kafka'
 # Attributes for registering these services to consul
 default[cookbook_name]['consul']['config_dir'] = '/opt/consul/etc'
 default[cookbook_name]['consul']['bin'] = '/opt/bin/consul'
+default[cookbook_name]['cli_opts'] = {
+  'config-dir' => default[cookbook_name]['consul']['config_dir'],
+  'enable-script-checks' => nil,
+}
 
 # Hosts of the cluster
 default[cookbook_name]['zookeeper']['hosts'] = []
@@ -62,7 +66,8 @@ default[cookbook_name]['kafka']['config'] = {
   'log.retention.check.interval.ms' => 300_000,
   'log.cleaner.enable' => false,
   'zookeeper.connect' => 'localhost:2181',
-  'zookeeper.connection.timeout.ms' => 6_000
+  'zookeeper.connection.timeout.ms' => 15_000,
+  'zookeeper.session.timeout.ms' => 15_000
 }
 
 # Kafka log4j configuration

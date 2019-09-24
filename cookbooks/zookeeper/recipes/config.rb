@@ -21,10 +21,26 @@ if cluster.nil?
   return
 end
 
-# Generate config
 config = node[cookbook_name]['config'].dup
-cluster.each_with_index do |v, i|
-  config["server.#{i + 1}"] = "#{v}:2888:3888"
+
+# Generate config
+if node[cookbook_name]['yggdrasil']['enabled']
+  cluster.each_with_index do |v, i|
+    config["server.#{i + 1}"] = "#{v['hostname']}:2888:3888"
+  end
+
+  if node[cookbook_name]['yggdrasil']['configure_etc_hosts']
+    cluster.each do |v|
+      hostsfile_entry "#{v['ip']}" do
+        hostname  "#{v['hostname']}"
+        action    :create
+      end
+    end
+  end
+else
+  cluster.each_with_index do |v, i|
+    config["server.#{i + 1}"] = "#{v}:2888:3888"
+  end
 end
 
 # General zookeeper config

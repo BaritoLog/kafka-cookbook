@@ -12,6 +12,17 @@ cookbook_name = 'zookeeper'
 default[cookbook_name]['hosts'] = []
 default[cookbook_name]['my_id'] = []
 
+# Yggdrasil configuration
+default[cookbook_name]['yggdrasil']['enabled'] = false
+default[cookbook_name]['yggdrasil']['host'] = ''
+default[cookbook_name]['yggdrasil']['port'] = '80'
+default[cookbook_name]['yggdrasil']['api_version'] = 'v2'
+default[cookbook_name]['yggdrasil']['token'] = ''
+default[cookbook_name]['yggdrasil']['namespace'] = ''
+default[cookbook_name]['yggdrasil']['overrides'] = ''
+default[cookbook_name]['yggdrasil']['key_name'] = "#{cookbook_name}_config"
+default[cookbook_name]['yggdrasil']['configure_etc_hosts'] = false
+
 # User and group of zookeeper process
 default[cookbook_name]['user'] = 'zookeeper'
 default[cookbook_name]['group'] = 'zookeeper'
@@ -100,8 +111,12 @@ default[cookbook_name]['jvm_opts'] = {
 }
 
 # Attributes for registering this service to consul
-default[cookbook_name]['consul']['config_dir'] = '/opt/consul/etc'
 default[cookbook_name]['consul']['bin'] = '/opt/bin/consul'
+default[cookbook_name]['consul']['config_dir'] = '/opt/consul/etc'
+default['consul']['cli_opts'] = {
+  'config-dir' => default[cookbook_name]['consul']['config_dir'],
+  'enable-script-checks' => nil
+}
 
 # Configure retries for the package resources, default = global default (0)
 # (mostly used for test purpose)

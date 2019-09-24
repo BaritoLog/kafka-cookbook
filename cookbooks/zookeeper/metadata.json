@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "ark": ">= 0.0.0",
-    "consul": ">= 0.0.0"
+    "consul": ">= 0.0.0",
+    "hostsfile": ">= 0.0.0"
   },
   "providing": {
 

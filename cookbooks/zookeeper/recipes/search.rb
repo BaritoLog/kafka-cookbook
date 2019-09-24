@@ -3,14 +3,26 @@
 # Recipe:: search 
 #
 # Copyright:: 2018, BaritoLog.
+require 'json'
 
 # Don't continue if these variables are empty
 node.run_state[cookbook_name] ||= {}
-if node[cookbook_name]['hosts'].empty? || !node[cookbook_name]['my_id'].is_a?(Integer)
+unless node[cookbook_name]['my_id'].is_a?(Integer)
   node.run_state[cookbook_name]['abort?'] = true
   return
 end
 
-# Keep it simple for now
-node.run_state[cookbook_name]['hosts'] = node[cookbook_name]['hosts']
+if node[cookbook_name]['yggdrasil']['enabled']
+  config_path = File.join(node[cookbook_name]['yggdrasil']['config_dir'], 'yggdrasil.json')
+  config = JSON.parse(File.read(config_path))
+
+  node.run_state[cookbook_name]['hosts'] ||= {}
+  node.run_state[cookbook_name]['hosts'] = JSON.parse(config["zookeeper_hosts"])
+elsif !node[cookbook_name]['hosts'].empty?
+  node.run_state[cookbook_name]['hosts'] = node[cookbook_name]['hosts']
+else
+  node.run_state[cookbook_name]['abort?'] = true
+  return
+end
+
 node.run_state[cookbook_name]['my_id'] = node[cookbook_name]['my_id']

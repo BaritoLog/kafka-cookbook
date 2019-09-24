@@ -1,42 +1,97 @@
 #
-# Cookbook: consul
-# License: Apache 2.0
+# Cookbook:: consul
+# Attribute:: default
 #
-# Copyright 2014-2016, Bloomberg Finance L.P.
+# Copyright:: 2018, BaritoLog.
+#
 #
 
-default['consul']['service_name'] = 'consul'
-default['consul']['service_user'] = 'consul'
-default['consul']['service_group'] = 'consul'
-default['consul']['create_service_user'] = true
+cookbook_name = 'consul'
 
-default['consul']['config']['path'] = join_path config_prefix_path, 'consul.json'
-default['consul']['config']['data_dir'] = data_path
-default['consul']['config']['ca_file'] = join_path config_prefix_path, 'ssl', 'CA', 'ca.crt'
-default['consul']['config']['cert_file'] = join_path config_prefix_path, 'ssl', 'certs', 'consul.crt'
-default['consul']['config']['key_file'] = join_path config_prefix_path, 'ssl', 'private', 'consul.key'
+# Choose to run consul as a server or client agent
+default[cookbook_name]['run_as_server'] = true
 
-default['consul']['config']['client_addr'] = '0.0.0.0'
-default['consul']['config']['ports'] = {
-  'dns'      => 8600,
-  'http'     => 8500,
-  'serf_lan' => 8301,
-  'serf_wan' => 8302,
-  'server'   => 8300,
+# Hosts of the cluster (servers)
+default[cookbook_name]['hosts'] = []
+
+# User and group of consul process
+default[cookbook_name]['user'] = 'consul'
+default[cookbook_name]['group'] = 'consul'
+
+# consul version
+default[cookbook_name]['version'] = '1.1.0'
+version = node[cookbook_name]['version']
+# package sha256 checksum
+default[cookbook_name]['checksum'] =
+  '09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45'
+
+# Where to get the zip file
+binary = "consul_#{version}_linux_amd64.zip"
+default[cookbook_name]['mirror'] =
+  "https://releases.hashicorp.com/consul/#{version}/#{binary}"
+
+# Installation directory
+default[cookbook_name]['prefix_root'] = '/opt'
+# Where to link installation dir
+default[cookbook_name]['prefix_home'] = '/opt'
+# Where to link binaries
+default[cookbook_name]['prefix_bin'] = '/opt/bin'
+
+# Data directory
+default[cookbook_name]['data_dir'] = '/var/opt/consul'
+
+# Configuration directory
+default[cookbook_name]['config_dir'] =
+  "#{node[cookbook_name]['prefix_home']}/consul/etc"
+
+# Consul configuration files
+default[cookbook_name]['main_config'] = 'consul.json'
+
+# Format : name of the file => configuration it contains
+default[cookbook_name]['config'] = {
+  node[cookbook_name]['main_config'] => { # Main configuration
+    'data_dir' => node[cookbook_name]['data_dir'],
+    'server' => node[cookbook_name]['run_as_server'],
+    'addresses' => {
+      'http' => '0.0.0.0'
+    },
+    'ports' => {
+      'http' => 8500
+    }
+    # 'bootstrap_expect' => will be filled dynamically
+    # 'start_join' => will be filled dynamically
+    # 'retry_join' => will be filled dynamically
+  }
 }
 
-default['consul']['diplomat_version'] = nil
-
-default['consul']['service']['config_dir'] = join_path config_prefix_path, 'conf.d'
-
-default['consul']['version'] = '0.9.3'
-
-# Windows only
-default['consul']['service']['nssm_params'] = {
-  'AppDirectory'     => data_path,
-  'AppStdout'        => join_path(config_prefix_path, 'stdout.log'),
-  'AppStderr'        => join_path(config_prefix_path, 'error.log'),
-  'AppRotateFiles'   => 1,
-  'AppRotateOnline'  => 1,
-  'AppRotateBytes'   => 20_000_000,
+# Consul daemon options, used to create the ExecStart option in service
+# You should modify the configuration file instead of the CLI options
+default[cookbook_name]['cli_opts'] = {
+  'config-dir' => node[cookbook_name]['config_dir']
 }
+
+# Systemd service unit, include config
+default[cookbook_name]['systemd_unit'] = {
+  'Unit' => {
+    'Description' => 'consul agent',
+    'After' => 'network.target'
+  },
+  'Service' => {
+    'Type' => 'simple',
+    'User' => node[cookbook_name]['user'],
+    'Group' => node[cookbook_name]['group'],
+    'Restart' => 'on-failure',
+    'ExecStart' => 'TO_BE_COMPLETED'
+  },
+  'Install' => {
+    'WantedBy' => 'multi-user.target'
+  }
+}
+
+# Configure retries for the package resources, default = global default (0)
+# (mostly used for test purpose)
+default[cookbook_name]['package_retries'] = nil
+
+# configure dns consul
+default[cookbook_name]['resolved']['dns_host'] = '127.0.0.1'
+default[cookbook_name]['resolved']['domain'] = '~consul'
