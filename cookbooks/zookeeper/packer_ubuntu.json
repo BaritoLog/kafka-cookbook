@@ -1,10 +1,10 @@
 {
   "variables": {
-    "build_commit_sha": "{{env `BUILD_COMMIT_SHA`}}",
     "build_version": "{{env `BUILD_VERSION`}}",
-    "builders_image": "{{env `BUILDERS_IMAGE`}}",
+    "build_commit_sha": "{{env `BUILD_COMMIT_SHA`}}",
+    "output_image": "{{env `OUTPUT_IMAGE`}}",
     "cookbook_paths": "{{env `COOKBOOK_PATHS`}}",
-    "output_image": "{{env `OUTPUT_IMAGE`}}"
+    "builders_image": "{{env `BUILDERS_IMAGE`}"
   },
   "builders": [
     {
@@ -14,7 +14,7 @@
       "publish_properties": {
         "version": "{{user `build_version`}}",
         "commit_sha": "{{user `build_commit_sha`}}",
-        "description": "LXD image for kafka"
+        "description": "LXD image for zookeeper"
       },
       "init_sleep": "5"
     }
@@ -23,7 +23,7 @@
     {
       "type": "chef-solo",
       "cookbook_paths": ["{{user `cookbook_paths`}}"],
-      "run_list": ["recipe[kafka::kafka]"]
+      "run_list": ["recipe[zookeeper::default]"]
     }
   ]
 }

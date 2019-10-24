@@ -9,6 +9,7 @@ variables:
   OUTPUT_IMAGE: "lxd-zookeeper-$CI_COMMIT_TAG"
   IMAGE_REGISTRY: "barito-registry"
   COOKBOOK_PATHS: "./cookbooks"
+  BUILDERS_IMAGE: "ubuntu-minimal:18.04"
 
 before_script:
   - curl -s https://raw.githubusercontent.com/BaritoLog/cx-scripts/master/gitlabci-install-packer.sh | bash

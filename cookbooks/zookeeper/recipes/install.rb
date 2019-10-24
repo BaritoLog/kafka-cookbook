@@ -69,3 +69,7 @@ install_dir = "#{node[cookbook_name]['prefix_home']}/zookeeper"
 link "#{install_dir}/zookeeper.jar" do
   to "#{install_dir}/zookeeper-#{node[cookbook_name]['version']}.jar"
 end
+
+execute 'apt autoremove' do
+  command 'apt autoremove -y'
+end
