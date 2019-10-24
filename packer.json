@@ -1,14 +1,15 @@
 {
   "variables": {
-    "build_version": "{{env `BUILD_VERSION`}}",
     "build_commit_sha": "{{env `BUILD_COMMIT_SHA`}}",
-    "output_image": "{{env `OUTPUT_IMAGE`}}",
-    "cookbook_paths": "{{env `COOKBOOK_PATHS`}}"
+    "build_version": "{{env `BUILD_VERSION`}}",
+    "builders_image": "{{env `BUILDERS_IMAGE`}}",
+    "cookbook_paths": "{{env `COOKBOOK_PATHS`}}",
+    "output_image": "{{env `OUTPUT_IMAGE`}}"
   },
   "builders": [
     {
       "type": "lxd",
-      "image": "ubuntu:18.04",
+      "image": "{{user `builders_image`}}",
       "output_image": "{{user `output_image`}}",
       "publish_properties": {
         "version": "{{user `build_version`}}",
