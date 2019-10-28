@@ -3,12 +3,13 @@
     "build_version": "{{env `BUILD_VERSION`}}",
     "build_commit_sha": "{{env `BUILD_COMMIT_SHA`}}",
     "output_image": "{{env `OUTPUT_IMAGE`}}",
-    "cookbook_paths": "{{env `COOKBOOK_PATHS`}}"
+    "cookbook_paths": "{{env `COOKBOOK_PATHS`}}",
+    "builders_image": "{{env `BUILDERS_IMAGE`}}"
   },
   "builders": [
     {
       "type": "lxd",
-      "image": "ubuntu:18.04",
+      "image": "{{user `builders_image`}}",
       "output_image": "{{user `output_image`}}",
       "publish_properties": {
         "version": "{{user `build_version`}}",
@@ -22,7 +23,14 @@
     {
       "type": "chef-solo",
       "cookbook_paths": ["{{user `cookbook_paths`}}"],
-      "run_list": ["recipe[zookeeper::default]"]
+      "run_list": ["recipe[zookeeper::default]"],
+      "json": {
+        "zookeeper": {
+          "java": {
+            "ubuntu": "openjdk-8-jdk-headless"
+          }
+        }
+      }
     }
   ]
 }
