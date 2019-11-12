@@ -23,7 +23,7 @@
     {
       "type": "chef-solo",
       "cookbook_paths": ["{{user `cookbook_paths`}}"],
-      "run_list": ["recipe[kafka::kafka]"]
+      "run_list": ["recipe[kafka::kafka]", "recipe[prometheus::kafka_exporter]"]
     }
   ]
 }

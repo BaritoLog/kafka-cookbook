@@ -1,0 +1,67 @@
+[main]
+    # instance_id allows you to run multiple trickster processes on the same host and log to separate files
+    # Useful for baremetal, not so much for elastic deployments, so only uncomment if you really need it
+    #instance_id = 1
+
+# Configuration options for the Proxy Server
+[proxy_server]
+    # listen_port defines the port on which Trickster's Proxy server listens.
+    # since this is a proxy for Prometheus, we use 9090 by default, just like Prometheus does
+    listen_port = <%= node["trickster"]["config"]["proxy_server"]["listen_port"] %>
+    # listen_address defines the ip on which Trickster's Proxy server listens.
+    # empty by default, listening on all interfaces
+    listen_address = '<%= node["trickster"]["config"]["proxy_server"]["listen_address"] %>'
+
+[cache]
+    # cache_type defines what kind of cache Trickster uses
+    # options are 'memory', 'redis' and 'filesystem'.  'memory' is the default
+    cache_type = '<%= node["trickster"]["config"]["cache"]["cache_type"] %>'
+
+    # record_ttl_secs defines the relative expiration of cached queries. default is 6 hours (21600 seconds)
+    record_ttl_secs = <%= node["trickster"]["config"]["cache"]["record_ttl_secs"] %>
+
+    # reap_sleep_ms defines how long the cache reaper waits between reap cycles. Default is 1000 (1s)
+    reap_sleep_ms = <%= node["trickster"]["config"]["cache"]["reap_sleep_ms"] %>
+
+    # compression determines whether the cache should be compressed. default is true
+    compression = <%= node["trickster"]["config"]["cache"]["compression"] %>
+
+<% Array(node["trickster"]["config"]["cache"]["options"]).sort.each do |cache_type, cache_option| -%>
+    [cache.<%= cache_type %>]
+<% Array(cache_option).each do |key, value| -%>
+        <%= key %> = '<%= value %>'
+<% end -%>
+<% end -%>
+
+# Configuration options for mapping Origin(s)
+[origins]
+<% Array(node["trickster"]["config"]["origins"]).sort.each do |origin_name, origin_options| -%>
+    [origins.<%= origin_name %>]
+<% Array(origin_options).each do |key, value| -%>
+<% if value.is_a? Numeric -%>
+        <%= key %> = <%= value %>
+<% else -%>
+        <%= key %> = '<%= value %>'
+<% end -%>
+<% end -%>
+<% end -%>
+
+# Configuration Options for Metrics Instrumentation
+[metrics]
+
+    # listen_port defines the port that Trickster's metrics server listens on at /metrics
+    listen_port = <%= node["trickster"]["config"]["metrics"]["listen_port"] %>
+    # listen_address defines the ip that Trickster's metrics server listens on at /metrics
+    # empty by default, listening on all interfaces
+    listen_address = '<%= node["trickster"]["config"]["metrics"]["listen_address"] %>'
+
+# Configuration Options for Logging Instrumentation
+[logging]
+
+    # log_level defines the verbosity of the logger. Possible values are 'debug', 'info', 'warn', 'error'
+    # default is info
+    log_level = '<%= node["trickster"]["config"]["logging"]["log_level"] %>'
+
+    # log_file defines the file location to store logs. These will be auto-rolled and maintained for you.
+    # not specifying a log_file (this is the default behavior) will print logs to STDOUT
+    #log_file = '/some/path/to/trickster.log'

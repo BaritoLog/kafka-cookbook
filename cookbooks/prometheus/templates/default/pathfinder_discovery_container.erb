@@ -1,0 +1,84 @@
+require 'json'
+
+ports = {
+        "zookeeper" => '<%= node["pathfinder_discovery"]["zookeeper_port"] %>',
+        "kafka" => '<%= node["pathfinder_discovery"]["kafka_port"] %>',
+        "kibana" => '<%= node["pathfinder_discovery"]["kibana_port"] %>',
+        "barito-flow-consumer" => '<%= node["pathfinder_discovery"]["barito_flow_consumer_port"] %>',
+        "barito-flow-producer" => '<%= node["pathfinder_discovery"]["barito_flow_producer_port"] %>',
+        "barito-market-db" => '<%= node["pathfinder_discovery"]["postgres_port"] %>',
+        "barito-market-redis" => '<%= node["pathfinder_discovery"]["redis_port"] %>',
+        "consul" => '<%= node["pathfinder_discovery"]["consul_port"] %>',
+        "elasticsearch" => '<%= node["pathfinder_discovery"]["elasticsearch_port"] %>',
+        "app" => '<%= node["pathfinder_discovery"]["barito_app_port"] %>',
+        "db" => '<%= node["pathfinder_discovery"]["postgres_port"] %>',
+        "redis" => '<%= node["pathfinder_discovery"]["redis_port"] %>',
+        "alertmanager" => '<%= node["pathfinder_discovery"]["alertmanager_port"] %>',
+        "prometheus" => '<%= node["pathfinder_discovery"]["prometheus_port"] %>',
+        "grafana" => '<%= node["pathfinder_discovery"]["grafana_port"] %>',
+        }
+
+def get_app_group(s)
+  groups = s.split("-")
+  if groups[0] == 'p' || groups[0] == 'i'
+    return groups[1]
+  else
+    return groups[0]
+  end
+end
+
+def get_app_type(s)
+  groups = s.split("-")
+  if groups[0] == 'p' || groups[0] == 'i'
+    return groups[2..-2].join('-')
+  else
+    return groups[1..-2].join('-')
+  end
+end
+
+def get_target_path(app_group, app_type)
+  if app_type == "kibana"
+    "/#{app_group}/_prometheus/metrics"
+  else
+    '/metrics'
+  end
+end
+
+lines = ""
+ARGF.each do |line|
+  lines += line
+end
+
+raw = JSON.parse(lines)
+group_bucket = {}
+raw['data']['items'].each do |c|
+  next unless ["PROVISIONED", "BOOTSTRAPPED"].include? c['status']
+
+  hostname = c['hostname']
+  ip = c['ipaddress']
+  app_group = get_app_group(hostname)
+  app_type = get_app_type(hostname)
+  key = [app_group, app_type]
+  if group_bucket[key].nil?
+    group_bucket[key] = [ip]
+  else
+    group_bucket[key].push(ip)
+  end
+end
+
+result = []
+group_bucket.each do |key, ips|
+  app_group = key[0]
+  app_type = key[1]
+  next if ["kibana", "barito-router-app", "barito-viewer-app", "barito-curator", "barito-market-app-02", "kafka-manager"].include? app_type
+  port = ports[app_type]
+  result.push({
+    "labels" => {
+      "app_group" => app_group,
+      "job" => app_type,
+      "__metrics_path__" => "#{get_target_path(app_group, app_type)}"
+    },
+  "targets" => ips.map{ |ip| "#{ip}:#{port}"}
+  })
+end
+puts result.to_json

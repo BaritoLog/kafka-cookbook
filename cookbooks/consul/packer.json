@@ -23,7 +23,10 @@
     {
       "type": "chef-solo",
       "cookbook_paths": ["{{user `cookbook_paths`}}"],
-      "run_list": ["recipe[consul::default]"]
+      "run_list": [
+        "recipe[consul::default]",
+        "recipe[prometheus::consul_exporter]"
+      ]
     }
   ]
 }
