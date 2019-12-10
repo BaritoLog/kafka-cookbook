@@ -23,14 +23,10 @@
     {
       "type": "chef-solo",
       "cookbook_paths": ["{{user `cookbook_paths`}}"],
-      "run_list": ["recipe[zookeeper::default]"],
-      "json": {
-        "zookeeper": {
-          "java": {
-            "ubuntu": "openjdk-8-jdk-headless"
-          }
-        }
-      }
+      "run_list": [
+        "recipe[zookeeper::default]",
+        "recipe[prometheus::zookeeper_exporter]"
+      ]
     }
   ]
 }

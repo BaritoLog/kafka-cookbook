@@ -167,13 +167,16 @@ default[cookbook_name]['kafka']['cli_opts'] = {
 default[cookbook_name]['kafka']['unit'] = {
   'Unit' => {
     'Description' => 'Kafka publish-subscribe messaging system',
-    'After' => 'network.target'
+    'After' => 'network.target',
+    'StartLimitInterval' => 200,
+    'StartLimitBurst' => 6
   },
   'Service' => {
     'User' => node[cookbook_name]['kafka']['user'],
     'Group' => node[cookbook_name]['kafka']['group'],
     'SyslogIdentifier' => 'kafka',
     'Restart' => 'on-failure',
+    'RestartSec' => 5,
     'ExecStart' => {
       'start' => '/usr/bin/java',
       'end' =>

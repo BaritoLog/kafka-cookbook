@@ -30,6 +30,10 @@ node[cookbook_name]['config'].each do |filename, config|
       config['start_join'] = servers
     end
 
+    if config['bind_addr'].nil? || config['bind_addr'].empty?
+      config['bind_addr'] = node['ipaddress']
+    end
+    
     config['retry_join'] = servers
   end
 
