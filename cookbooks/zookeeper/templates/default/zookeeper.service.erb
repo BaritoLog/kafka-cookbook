@@ -6,7 +6,10 @@ After=network.target
 User=<%= @node[cookbook_name]['user'] %>
 Group=<%= @node[cookbook_name]['group'] %>
 SyslogIdentifier=zookeeper
-Restart=on-failure
+Restart=always
+RestartSec=30
+StartLimitInterval=400
+StartLimitBurst=10
 ExecStart=/usr/bin/java \
   -cp <%= @classpath %> \
   -Dlog4j.configuration=file:<%= @log4j_file %> \
