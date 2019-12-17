@@ -21,6 +21,7 @@ default[cookbook_name]['zookeeper']['hosts'] = []
 
 # Hosts of the cluster
 default[cookbook_name]['kafka']['hosts'] = []
+default[cookbook_name]['kafka']['hosts_count'] = 1
 
 # Yggdrasil configuration
 default[cookbook_name]['yggdrasil']['enabled'] = false
