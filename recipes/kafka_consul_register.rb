@@ -6,6 +6,9 @@
 #
 #
 
+# Install netcat
+apt_package 'netcat'
+
 config = {
   "id": "#{node['hostname']}-kafka",
   "name": "kafka",

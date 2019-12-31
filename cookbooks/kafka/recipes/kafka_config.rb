@@ -43,8 +43,8 @@ zk_connection = zookeeper_cluster['hosts'].
 zk_connection += node[cookbook_name]['kafka']['zk_chroot']
 config['zookeeper.connect'] = zk_connection
 
-# Configure replication factor
-kafka_hosts_count = node[cookbook_name]['kafka']['hosts'].count
+# Configure replication factor by number of hosts_count attribute
+kafka_hosts_count = node[cookbook_name]['kafka']['hosts_count']
 if kafka_hosts_count < 3
   config['offsets.topic.replication.factor'] = kafka_hosts_count
 else

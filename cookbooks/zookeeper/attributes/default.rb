@@ -10,7 +10,7 @@ cookbook_name = 'zookeeper'
 
 # Hosts of the cluster
 default[cookbook_name]['hosts'] = []
-default[cookbook_name]['my_id'] = []
+default[cookbook_name]['my_id'] = nil
 
 # Yggdrasil configuration
 default[cookbook_name]['yggdrasil']['enabled'] = false
@@ -117,6 +117,7 @@ default['consul']['cli_opts'] = {
   'config-dir' => default[cookbook_name]['consul']['config_dir'],
   'enable-script-checks' => nil
 }
+default[cookbook_name]['consul']['tags'] = []
 
 # Configure retries for the package resources, default = global default (0)
 # (mostly used for test purpose)

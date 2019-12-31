@@ -89,7 +89,7 @@ describe systemd_service('burrow') do
 
   # Test is replaced because the test before only checks before the block starts
   it 'should be running', retry: 3, retry_wait: 10 do
-    expect(command("systemctl is-active burrow --quiet").exit_status).to eq 0
+    expect(command("sudo systemctl is-active burrow --quiet").exit_status).to eq 0
   end
 end
 
@@ -97,4 +97,9 @@ describe systemd_service('consul') do
   it { should be_installed }
   it { should be_enabled }
   it { should be_running }
+
+end
+
+describe package('netcat') do
+  it { should be_installed }
 end
