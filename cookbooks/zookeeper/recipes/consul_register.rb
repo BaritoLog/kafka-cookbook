@@ -5,6 +5,10 @@
 # Copyright:: 2018, BaritoLog.
 #
 #
+
+# Install netcat
+apt_package 'netcat'
+
 tags = node.default[cookbook_name]['consul']['tags']
 tags << "#{node[cookbook_name]['my_id']}"
 
