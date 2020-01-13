@@ -28,7 +28,7 @@ checks = [
   {
     "id": "#{node['hostname']}-hc-payload",
     "name": "kafka",
-    "args": ["/bin/bash", "-c", "nc -vz #{node['ipaddress']} #{node[cookbook_name]['kafka']['port']} 2>&1 | grep open"],
+    "args": ["/bin/bash", "-c", "nc -vz #{node['ipaddress']} #{node[cookbook_name]['kafka']['port']} 2>&1 | grep 'open\|succeeded'"],
     "interval": "10s",
     "timeout": "1s"
   }
