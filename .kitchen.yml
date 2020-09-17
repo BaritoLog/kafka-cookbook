@@ -11,6 +11,9 @@ provisioner:
   # For example:
   #   always_update_cookbooks: <%= !ENV['CI'] %>
   always_update_cookbooks: true
+  client_rb:
+    environment: _default
+    chef_license: accept
 
 verifier:
   name: inspec
@@ -26,11 +29,11 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[zookeeper]
+      # - recipe[zookeeper]
       - recipe[kafka::kafka]
-      - recipe[kafka::burrow_install]
-      - recipe[consul::default]
-      - recipe[kafka::kafka_consul_register]
+      # - recipe[kafka::burrow_install]
+      # - recipe[consul::default]
+      # - recipe[kafka::kafka_consul_register]
     driver_config:
       customize:
         memory: 2048
@@ -62,6 +65,8 @@ suites:
           hosts: ["default-opscode-ubuntu-1804-chef-14"]
         kafka:
           role: kafka-cluster
+          confluent_version: "5.3.0"
+          scala_version: "2.11"
           hosts: ["default-opscode-ubuntu-1804-chef-14"]
           auto_restart: true
           cli_opts:

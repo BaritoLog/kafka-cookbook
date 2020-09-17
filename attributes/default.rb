@@ -39,7 +39,7 @@ default[cookbook_name]['java'] = {
 }
 
 # Confluent & kafka version
-default[cookbook_name]['confluent_version'] = '4.1.0'
+default[cookbook_name]['confluent_version'] = '5.3.0'
 default[cookbook_name]['scala_version'] = '2.11'
 
 # Kafka configuration
