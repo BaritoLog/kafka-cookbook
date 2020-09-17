@@ -60,7 +60,5 @@ when 'rhel'
     retries package_retries unless package_retries.nil?
   end
 when 'debian'
-  apt_package "confluent-kafka-#{scala_version}" do
-    retries package_retries unless package_retries.nil?
-  end
+  apt_package "confluent-kafka-#{scala_version}"
 end
