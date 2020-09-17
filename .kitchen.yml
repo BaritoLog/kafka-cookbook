@@ -29,11 +29,11 @@ platforms:
 suites:
   - name: default
     run_list:
-      # - recipe[zookeeper]
+      - recipe[zookeeper]
       - recipe[kafka::kafka]
-      # - recipe[kafka::burrow_install]
-      # - recipe[consul::default]
-      # - recipe[kafka::kafka_consul_register]
+      - recipe[kafka::burrow_install]
+      - recipe[consul::default]
+      - recipe[kafka::kafka_consul_register]
     driver_config:
       customize:
         memory: 2048
@@ -56,6 +56,8 @@ suites:
         jvm_opts:
           -Xmx128m:
       kafka:
+        confluent_version: "5.5.0"
+        scala_version: "2.12"
         yggdrasil:
           enabled: true
           config_dir: "/opt/yggdrasil"
@@ -65,8 +67,6 @@ suites:
           hosts: ["default-opscode-ubuntu-1804-chef-14"]
         kafka:
           role: kafka-cluster
-          confluent_version: "5.3.0"
-          scala_version: "2.11"
           hosts: ["default-opscode-ubuntu-1804-chef-14"]
           auto_restart: true
           cli_opts:
