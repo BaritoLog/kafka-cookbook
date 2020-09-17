@@ -41,3 +41,9 @@ execute "save iptables rules" do
   group "root"
   command "iptables-save"
 end
+
+execute "install iptables-persistent" do
+  user "root"
+  group "root"
+  command "DEBIAN_FRONTEND=noninteractive apt install -y -q iptables-persistent"
+end

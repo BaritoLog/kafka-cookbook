@@ -1,7 +1,7 @@
 {
   "name": "prometheus",
-  "description": "Installs/Configures prometheus",
-  "long_description": "Installs/Configures prometheus",
+  "description": "Installs/Configures prometheus & exporter",
+  "long_description": "Installs/Configures prometheus & exporter",
   "maintainer": "Gojek Engineering",
   "maintainer_email": "baritolog@go-jek.com",
   "license": "Apache-2.0",
@@ -22,7 +22,7 @@
   "recipes": {
 
   },
-  "version": "0.1.1",
+  "version": "0.1.8",
   "source_url": "https://github.com/BaritoLog/prometheus-cookbook",
   "issues_url": "https://github.com/BaritoLog/prometheus-cookbook/issues",
   "privacy": false,

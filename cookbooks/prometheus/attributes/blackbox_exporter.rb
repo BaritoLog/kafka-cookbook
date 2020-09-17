@@ -16,3 +16,17 @@ default["blackbox_exporter"]["binary_url"] = "https://github.com/prometheus/blac
 
 # Blackbox Exporter flags
 default["blackbox_exporter"]["flags"]["config.file"] = "#{node["blackbox_exporter"]["dir"]}/blackbox.yml"
+
+default["blackbox_exporter"]["config_content"] = %q(
+modules:
+  http_2xx:
+    prober: http
+  http_post_2xx:
+    prober: http
+    http:
+      method: POST
+  tcp_connect:
+    prober: tcp
+  icmp:
+    prober: icmp
+)

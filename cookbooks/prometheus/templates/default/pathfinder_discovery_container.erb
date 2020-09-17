@@ -19,12 +19,20 @@ ports = {
         }
 
 def get_app_group(s)
+  group = ""
   groups = s.split("-")
+  
   if groups[0] == 'p' || groups[0] == 'i'
-    return groups[1]
+    group = groups[1]
   else
-    return groups[0]
+    group = groups[0]
   end
+
+  if group == 'c'
+    group = "core"
+  end
+
+  return group
 end
 
 def get_app_type(s)
@@ -58,7 +66,7 @@ raw['data']['items'].each do |c|
   ip = c['ipaddress']
   app_group = get_app_group(hostname)
   app_type = get_app_type(hostname)
-  key = [app_group, app_type]
+  key = [app_group, app_type, hostname, ip]
   if group_bucket[key].nil?
     group_bucket[key] = [ip]
   else
@@ -70,15 +78,22 @@ result = []
 group_bucket.each do |key, ips|
   app_group = key[0]
   app_type = key[1]
-  next if ["kibana", "barito-router-app", "barito-viewer-app", "barito-curator", "barito-market-app-02", "kafka-manager"].include? app_type
+  hostname = key[2]
+  ip = key[3]
+  next if ["kibana", "barito-router-app", "barito-viewer-app", "barito-curator", "barito-market-app-01", "barito-market-app-02", "kafka-manager"].include? app_type
   port = ports[app_type]
   result.push({
     "labels" => {
       "app_group" => app_group,
+      "app_name" => app_group,
+      "component" => app_type,
+      "instance" => ip,
       "job" => app_type,
+      "name" => hostname,
       "__metrics_path__" => "#{get_target_path(app_group, app_type)}"
     },
   "targets" => ips.map{ |ip| "#{ip}:#{port}"}
   })
 end
+
 puts result.to_json

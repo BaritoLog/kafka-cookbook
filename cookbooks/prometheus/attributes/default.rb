@@ -9,8 +9,8 @@ default["prometheus"]["user"] = "prometheus"
 default["prometheus"]["group"] = "prometheus"
 
 # Prometheus version
-default["prometheus"]["version"] = "2.11.1"
-default["prometheus"]["checksum"] = "50b5f4dfd3f358518c1aaa3bd7df2e90780bdb5292b5c996137c2b1e81102390"
+default["prometheus"]["version"] = "2.19.2"
+default["prometheus"]["checksum"] = "68382959f73354b30479f9cc3e779cf80fd2e93010331652700dcc71f6b05586"
 default["prometheus"]["binary_url"] = "https://github.com/prometheus/prometheus/releases/download/v#{node["prometheus"]["version"]}/prometheus-#{node["prometheus"]["version"]}.linux-amd64.tar.gz"
 
 # Prometheus configuration repository
@@ -29,6 +29,13 @@ default["prometheus"]["config"]["recording_rules_dir"] = "#{node["prometheus"]["
 default["prometheus"]["config"]["inventory_dir"] = "#{node["prometheus"]["dir"]}/inventory"
 
 # Prometheus configuration
+default["prometheus"]["tls_certs_dir"] = "/opt/prometheus/secrets"
+default["prometheus"]["tls_certs"]["enabled"] = false
+default["prometheus"]["tls_certs"]["insecure_skip_verify"] = false
+default["prometheus"]["tls_certs"]["ca_content"] = ""
+default["prometheus"]["tls_certs"]["cert_content"] = ""
+default["prometheus"]["tls_certs"]["key_content"] = ""
+
 default["prometheus"]["config"]["scrape_interval"] = "15s"
 default["prometheus"]["config"]["scrape_timeout"] = "10s"
 default["prometheus"]["config"]["evaluation_interval"] = "15s"
@@ -36,7 +43,7 @@ default["prometheus"]["config"]["external_labels"] = {}
 default["prometheus"]["config"]["remote_write"] = []
 default["prometheus"]["config"]["remote_read"] = []
 default["prometheus"]["config"]["scrape_configs"] = []
-default["prometheus"]["config"]["alerting"] = []
+default["prometheus"]["config"]["alerting"] = {}
 default["prometheus"]["config"]["rule_files"] = [
   File.join(node["prometheus"]["config"]["rules_dir"], "/*.yml"),
   File.join(node["prometheus"]["config"]["alerting_rules_dir"], "/*.yml"),
@@ -49,5 +56,6 @@ default["prometheus"]["flags"]["web.enable-admin-api"] = true
 default["prometheus"]["flags"]["web.enable-lifecycle"] = true
 default["prometheus"]["flags"]["web.external-url"] = "https://#{node["fqdn"]}"
 default["prometheus"]["flags"]["storage.tsdb.path"] = "#{node["prometheus"]["dir"]}/data"
-default["prometheus"]["flags"]["storage.tsdb.retention"] = "90d"
-default["prometheus"]["flags"]["storage.tsdb.max-block-duration"] = "7d"
+default["prometheus"]["flags"]["storage.tsdb.retention"] = "30d"
+default["prometheus"]["flags"]["storage.tsdb.max-block-duration"] = "2h"
+default["prometheus"]["flags"]["storage.tsdb.min-block-duration"] = "2h"
