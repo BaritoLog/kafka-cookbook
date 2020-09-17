@@ -11,6 +11,9 @@ provisioner:
   # For example:
   #   always_update_cookbooks: <%= !ENV['CI'] %>
   always_update_cookbooks: true
+  client_rb:
+    environment: _default
+    chef_license: accept
 
 verifier:
   name: inspec
@@ -53,6 +56,8 @@ suites:
         jvm_opts:
           -Xmx128m:
       kafka:
+        confluent_version: "5.5.0"
+        scala_version: "2.12"
         yggdrasil:
           enabled: true
           config_dir: "/opt/yggdrasil"

@@ -1,6 +1,6 @@
 #
 # Cookbook:: kafka
-# Recipe:: kafka_install 
+# Recipe:: kafka_install
 #
 # Copyright:: 2018, BaritoLog.
 #
@@ -54,6 +54,13 @@ end
 # Install kafka with configured scala version
 scala_version = node.attribute[cookbook_name]['scala_version']
 
-package "confluent-kafka-#{scala_version}" do
-  retries package_retries unless package_retries.nil?
+case node['platform_family']
+when 'rhel'
+  package "confluent-kafka-#{scala_version}" do
+    retries package_retries unless package_retries.nil?
+  end
+when 'debian'
+  apt_package "confluent-kafka-#{scala_version}" do
+    retries package_retries unless package_retries.nil?
+  end
 end
