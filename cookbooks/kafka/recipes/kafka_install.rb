@@ -53,6 +53,13 @@ end
 
 # Install kafka with configured scala version
 scala_version = node.attribute[cookbook_name]['scala_version']
+current_version = `dpkg -l | grep -E "^ii\s+confluent-kafka" | awk '{ print $2 }'`
+if current_version.strip == "confluent-kafka-2.11" && scala_version == "2.12"
+  apt_package "confluent-kafka-2.11" do
+    retries package_retries unless package_retries.nil?
+    action :upgrade
+  end
+end
 
 case node['platform_family']
 when 'rhel'
